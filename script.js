@@ -622,14 +622,15 @@ local function setupFarmTab()
     end, tabs["Farm"].content)
 end
 -- ===== PESTAÑA FARM AVANZADA =====
+-- ===== PESTAÑA FARM AVANZADA =====
 local function setupFarmAvanzadaTab()
     local autoFarmIman = {
         activo = false,
         conexion = nil,
         npcFolder = nil,
-        maxDistance = 120, -- Solo NPCs cerca
-        minDistance = 8,   -- No mover si está más cerca que esto
-        loopDelay = 0.2,   -- Menos frecuente
+        maxDistance = 40, -- Menor rango para el imán
+        minDistance = 8,
+        loopDelay = 0.2,
         start = function(self)
             if self.activo then return end
             self.activo = true
@@ -673,6 +674,34 @@ local function setupFarmAvanzadaTab()
             autoFarmIman:start()
         else
             autoFarmIman:stop()
+        end
+    end, tabs["Farm Avanzada"].content)
+
+    -- Botón para TP al NPC más cercano
+    local tpBtn = CriarBotao("TP al NPC más cercano", function()
+        local npcFolder = workspace:FindFirstChild("Enemys")
+        local character = LocalPlayer.Character
+        local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
+        if not npcFolder or not humanoidRootPart then return end
+
+        local npcMasCercano = nil
+        local menorDistancia = math.huge
+        for _, npc in ipairs(npcFolder:GetChildren()) do
+            if npc:IsA("Model") and npc:FindFirstChild("Humanoid") and npc.Humanoid.Health > 0 and npc:FindFirstChild("HumanoidRootPart") then
+                local npcHRP = npc.HumanoidRootPart
+                local distancia = (humanoidRootPart.Position - npcHRP.Position).Magnitude
+                if distancia < menorDistancia then
+                    menorDistancia = distancia
+                    npcMasCercano = npcHRP
+                end
+            end
+        end
+
+        if npcMasCercano then
+            humanoidRootPart.CFrame = npcMasCercano.CFrame + Vector3.new(2, 0, 0) -- Te deja al lado del NPC
+            print("✅ Teletransportado al NPC más cercano.")
+        else
+            print("❌ No hay NPCs válidos cerca.")
         end
     end, tabs["Farm Avanzada"].content)
 end
