@@ -705,7 +705,7 @@ local function setupFarmAvanzadaTab()
                 end
 
                 if npcMasCercano then
-                    humanoidRootPart.CFrame = npcMasCercano.CFrame + Vector3.new(2, 0, 0)
+                    humanoidRootPart.CFrame = npcMasCercano.CFrame + Vector3.new(5, 0, 0)
                     -- Click izquierdo automático (ataque rápido)
                     pcall(function()
                         local args = {
