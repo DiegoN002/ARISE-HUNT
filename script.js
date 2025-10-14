@@ -627,9 +627,9 @@ local function setupFarmAvanzadaTab()
         activo = false,
         conexion = nil,
         npcFolder = nil,
-        maxDistance = 120, -- Solo NPCs cerca (ajusta el valor si quieres más o menos distancia)
-        pullDistance = 10, -- Los acerca más fuerte
-        loopDelay = 0.1,   -- Más rápido que el farm normal
+        maxDistance = 120, -- Solo NPCs cerca
+        minDistance = 8,   -- No mover si está más cerca que esto
+        loopDelay = 0.2,   -- Menos frecuente
         start = function(self)
             if self.activo then return end
             self.activo = true
@@ -645,15 +645,16 @@ local function setupFarmAvanzadaTab()
                     if npc:IsA("Model") and npc:FindFirstChild("Humanoid") and npc.Humanoid.Health > 0 and npc:FindFirstChild("HumanoidRootPart") then
                         local npcHRP = npc.HumanoidRootPart
                         local distancia = (humanoidRootPart.Position - npcHRP.Position).Magnitude
-                        if distancia < self.maxDistance then
+                        if distancia < self.maxDistance and distancia > self.minDistance then
                             local direccion = (humanoidRootPart.Position - npcHRP.Position).Unit
                             npcHRP.CFrame = CFrame.new(
-                                humanoidRootPart.Position + direccion * 5,
+                                humanoidRootPart.Position + direccion * self.minDistance,
                                 humanoidRootPart.Position
                             )
                         end
                     end
                 end
+                wait(self.loopDelay)
             end)
         end,
         stop = function(self)
