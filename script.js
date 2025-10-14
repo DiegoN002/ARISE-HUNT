@@ -678,7 +678,7 @@ local function setupFarmAvanzadaTab()
         end
     end, tabs["Farm Avanzada"].content)
 
-    -- Toggle para TP auto al NPC más cercano con click automático
+    -- Toggle para TP auto al NPC más cercano (sin auto click)
     local tpAutoActivo = false
     local tpAutoConexion = nil
     local TpAutoToggle, TpAutoBox, setTpAutoState = CriarToggle("TP auto al NPC más cercano", function(isActive)
@@ -706,17 +706,8 @@ local function setupFarmAvanzadaTab()
 
                 if npcMasCercano then
                     humanoidRootPart.CFrame = npcMasCercano.CFrame + Vector3.new(2, 0, 0)
-                    -- Click izquierdo automático (ataque rápido)
-                    pcall(function()
-                        local args = {
-                            {
-                                attackEnemyGUID = npcMasCercano.Parent:GetAttribute("GUID") or npcMasCercano.Parent.Name
-                            }
-                        }
-                        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PlayerClickAttackSkill"):FireServer(unpack(args))
-                    end)
                 end
-                wait(3.2) -- Delay rápido pero no exagerado
+                wait(0.5)
             end)
         else
             print("🔴 TP auto DESACTIVADO")
