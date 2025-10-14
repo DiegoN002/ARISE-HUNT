@@ -707,7 +707,7 @@ local function setupFarmAvanzadaTab()
                 if npcMasCercano then
                     humanoidRootPart.CFrame = npcMasCercano.CFrame + Vector3.new(2, 0, 0)
                 end
-                wait(0.2)
+                wait(0)
             end)
         else
             print("🔴 TP auto DESACTIVADO")
