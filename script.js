@@ -716,7 +716,7 @@ local function setupFarmAvanzadaTab()
                         game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PlayerClickAttackSkill"):FireServer(unpack(args))
                     end)
                 end
-                wait(1.2) -- Delay rápido pero no exagerado
+                wait(3.2) -- Delay rápido pero no exagerado
             end)
         else
             print("🔴 TP auto DESACTIVADO")
