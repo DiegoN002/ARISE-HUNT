@@ -630,7 +630,7 @@ local function setupFarmAvanzadaTab()
         npcFolder = nil,
         maxDistance = 40, -- Menor rango para el imán
         minDistance = 8,
-        loopDelay = 0.2,
+        loopDelay = 0,
         start = function(self)
             if self.activo then return end
             self.activo = true
