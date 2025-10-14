@@ -629,7 +629,7 @@ local function setupFarmAvanzadaTab()
         activo = false,
         conexion = nil,
         npcFolder = nil,
-        maxDistance = 40, -- Menor rango para el imán
+        maxDistance = 40,
         minDistance = 8,
         loopDelay = 0.2,
         start = function(self)
@@ -670,7 +670,7 @@ local function setupFarmAvanzadaTab()
         end
     }
 
-    -- Botón para activar/desactivar el imán
+    -- Toggle para activar/desactivar el imán
     local FarmAvanzadaToggle, FarmAvanzadaBox, setFarmAvanzadaState = CriarToggle("Farm Avanzada (Imán)", function(isActive)
         if isActive then
             autoFarmIman:start()
@@ -679,34 +679,42 @@ local function setupFarmAvanzadaTab()
         end
     end, tabs["Farm Avanzada"].content)
 
-    -- Botón para TP al NPC más cercano
-    local tpActivo = false
-    local tpBtn = CriarToggle("TP al NPC más cercano", function(isActive)
-        tpActivo = isActive
-        if tpActivo then
-            local npcFolder = workspace:FindFirstChild("Enemys")
-            local character = LocalPlayer.Character
-            local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
-            if not npcFolder or not humanoidRootPart then return end
+    -- Toggle para TP auto al NPC más cercano
+    local tpAutoActivo = false
+    local tpAutoConexion = nil
+    local TpAutoToggle, TpAutoBox, setTpAutoState = CriarToggle("TP auto al NPC más cercano", function(isActive)
+        tpAutoActivo = isActive
+        if tpAutoActivo then
+            print("🟢 TP auto ACTIVADO")
+            tpAutoConexion = RunService.Heartbeat:Connect(function()
+                local npcFolder = workspace:FindFirstChild("Enemys")
+                local character = LocalPlayer.Character
+                local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
+                if not npcFolder or not humanoidRootPart then return end
 
-            local npcMasCercano = nil
-            local menorDistancia = math.huge
-            for _, npc in ipairs(npcFolder:GetChildren()) do
-                if npc:IsA("Model") and npc:FindFirstChild("Humanoid") and npc.Humanoid.Health > 0 and npc:FindFirstChild("HumanoidRootPart") then
-                    local npcHRP = npc.HumanoidRootPart
-                    local distancia = (humanoidRootPart.Position - npcHRP.Position).Magnitude
-                    if distancia < menorDistancia then
-                        menorDistancia = distancia
-                        npcMasCercano = npcHRP
+                local npcMasCercano = nil
+                local menorDistancia = math.huge
+                for _, npc in ipairs(npcFolder:GetChildren()) do
+                    if npc:IsA("Model") and npc:FindFirstChild("Humanoid") and npc.Humanoid.Health > 0 and npc:FindFirstChild("HumanoidRootPart") then
+                        local npcHRP = npc.HumanoidRootPart
+                        local distancia = (humanoidRootPart.Position - npcHRP.Position).Magnitude
+                        if distancia < menorDistancia then
+                            menorDistancia = distancia
+                            npcMasCercano = npcHRP
+                        end
                     end
                 end
-            end
 
-            if npcMasCercano then
-                humanoidRootPart.CFrame = npcMasCercano.CFrame + Vector3.new(2, 0, 0)
-                print("✅ Teletransportado al NPC más cercano.")
-            else
-                print("❌ No hay NPCs válidos cerca.")
+                if npcMasCercano then
+                    humanoidRootPart.CFrame = npcMasCercano.CFrame + Vector3.new(2, 0, 0)
+                end
+                wait(0.5)
+            end)
+        else
+            print("🔴 TP auto DESACTIVADO")
+            if tpAutoConexion then
+                tpAutoConexion:Disconnect()
+                tpAutoConexion = nil
             end
         end
     end, tabs["Farm Avanzada"].content)
