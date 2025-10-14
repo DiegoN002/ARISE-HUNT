@@ -622,14 +622,13 @@ local function setupFarmTab()
     end, tabs["Farm"].content)
 end
 -- ===== PESTAÑA FARM AVANZADA =====
--- ===== PESTAÑA FARM AVANZADA =====
 local function setupFarmAvanzadaTab()
     -- Imán con rango reducido
     local autoFarmIman = {
         activo = false,
         conexion = nil,
         npcFolder = nil,
-        maxDistance = 40,
+        maxDistance = 40, -- Menor rango para el imán
         minDistance = 8,
         loopDelay = 0.2,
         start = function(self)
@@ -679,7 +678,7 @@ local function setupFarmAvanzadaTab()
         end
     end, tabs["Farm Avanzada"].content)
 
-    -- Toggle para TP auto al NPC más cercano (solo NPCs vivos)
+    -- Toggle para TP auto al NPC más cercano con click automático
     local tpAutoActivo = false
     local tpAutoConexion = nil
     local TpAutoToggle, TpAutoBox, setTpAutoState = CriarToggle("TP auto al NPC más cercano", function(isActive)
@@ -705,11 +704,19 @@ local function setupFarmAvanzadaTab()
                     end
                 end
 
-                -- Solo TP si hay un NPC vivo
                 if npcMasCercano then
                     humanoidRootPart.CFrame = npcMasCercano.CFrame + Vector3.new(2, 0, 0)
+                    -- Click izquierdo automático (ataque rápido)
+                    pcall(function()
+                        local args = {
+                            {
+                                attackEnemyGUID = npcMasCercano.Parent:GetAttribute("GUID") or npcMasCercano.Parent.Name
+                            }
+                        }
+                        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PlayerClickAttackSkill"):FireServer(unpack(args))
+                    end)
                 end
-                wait(0.5)
+                wait(0.2) -- Delay rápido pero no exagerado
             end)
         else
             print("🔴 TP auto DESACTIVADO")
