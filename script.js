@@ -679,7 +679,7 @@ local function setupFarmAvanzadaTab()
         end
     end, tabs["Farm Avanzada"].content)
 
-    -- Toggle para TP auto al NPC más cercano
+    -- Toggle para TP auto al NPC más cercano (solo NPCs vivos)
     local tpAutoActivo = false
     local tpAutoConexion = nil
     local TpAutoToggle, TpAutoBox, setTpAutoState = CriarToggle("TP auto al NPC más cercano", function(isActive)
@@ -705,6 +705,7 @@ local function setupFarmAvanzadaTab()
                     end
                 end
 
+                -- Solo TP si hay un NPC vivo
                 if npcMasCercano then
                     humanoidRootPart.CFrame = npcMasCercano.CFrame + Vector3.new(2, 0, 0)
                 end
