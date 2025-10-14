@@ -630,7 +630,7 @@ local function setupFarmAvanzadaTab()
         npcFolder = nil,
         maxDistance = 40, -- Menor rango para el imán
         minDistance = 8,
-        loopDelay = 0,
+        loopDelay = 0.2,
         start = function(self)
             if self.activo then return end
             self.activo = true
@@ -707,7 +707,7 @@ local function setupFarmAvanzadaTab()
                 if npcMasCercano then
                     humanoidRootPart.CFrame = npcMasCercano.CFrame + Vector3.new(2, 0, 0)
                 end
-                wait(0.5)
+                wait(0.2)
             end)
         else
             print("🔴 TP auto DESACTIVADO")
