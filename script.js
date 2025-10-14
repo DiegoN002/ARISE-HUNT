@@ -624,6 +624,7 @@ end
 -- ===== PESTAÑA FARM AVANZADA =====
 -- ===== PESTAÑA FARM AVANZADA =====
 local function setupFarmAvanzadaTab()
+    -- Imán con rango reducido
     local autoFarmIman = {
         activo = false,
         conexion = nil,
@@ -669,6 +670,7 @@ local function setupFarmAvanzadaTab()
         end
     }
 
+    -- Botón para activar/desactivar el imán
     local FarmAvanzadaToggle, FarmAvanzadaBox, setFarmAvanzadaState = CriarToggle("Farm Avanzada (Imán)", function(isActive)
         if isActive then
             autoFarmIman:start()
@@ -678,30 +680,34 @@ local function setupFarmAvanzadaTab()
     end, tabs["Farm Avanzada"].content)
 
     -- Botón para TP al NPC más cercano
-    local tpBtn = CriarBotao("TP al NPC más cercano", function()
-        local npcFolder = workspace:FindFirstChild("Enemys")
-        local character = LocalPlayer.Character
-        local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
-        if not npcFolder or not humanoidRootPart then return end
+    local tpActivo = false
+    local tpBtn = CriarToggle("TP al NPC más cercano", function(isActive)
+        tpActivo = isActive
+        if tpActivo then
+            local npcFolder = workspace:FindFirstChild("Enemys")
+            local character = LocalPlayer.Character
+            local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
+            if not npcFolder or not humanoidRootPart then return end
 
-        local npcMasCercano = nil
-        local menorDistancia = math.huge
-        for _, npc in ipairs(npcFolder:GetChildren()) do
-            if npc:IsA("Model") and npc:FindFirstChild("Humanoid") and npc.Humanoid.Health > 0 and npc:FindFirstChild("HumanoidRootPart") then
-                local npcHRP = npc.HumanoidRootPart
-                local distancia = (humanoidRootPart.Position - npcHRP.Position).Magnitude
-                if distancia < menorDistancia then
-                    menorDistancia = distancia
-                    npcMasCercano = npcHRP
+            local npcMasCercano = nil
+            local menorDistancia = math.huge
+            for _, npc in ipairs(npcFolder:GetChildren()) do
+                if npc:IsA("Model") and npc:FindFirstChild("Humanoid") and npc.Humanoid.Health > 0 and npc:FindFirstChild("HumanoidRootPart") then
+                    local npcHRP = npc.HumanoidRootPart
+                    local distancia = (humanoidRootPart.Position - npcHRP.Position).Magnitude
+                    if distancia < menorDistancia then
+                        menorDistancia = distancia
+                        npcMasCercano = npcHRP
+                    end
                 end
             end
-        end
 
-        if npcMasCercano then
-            humanoidRootPart.CFrame = npcMasCercano.CFrame + Vector3.new(2, 0, 0) -- Te deja al lado del NPC
-            print("✅ Teletransportado al NPC más cercano.")
-        else
-            print("❌ No hay NPCs válidos cerca.")
+            if npcMasCercano then
+                humanoidRootPart.CFrame = npcMasCercano.CFrame + Vector3.new(2, 0, 0)
+                print("✅ Teletransportado al NPC más cercano.")
+            else
+                print("❌ No hay NPCs válidos cerca.")
+            end
         end
     end, tabs["Farm Avanzada"].content)
 end
