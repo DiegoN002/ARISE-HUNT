@@ -40,7 +40,7 @@ local Titulo = Instance.new("TextLabel")
 Titulo.Size = UDim2.new(0.8, 0, 1, 0)
 Titulo.Position = UDim2.new(0.1, 0, 0, 0)
 Titulo.BackgroundTransparency = 1
-Titulo.Text = "COC"
+Titulo.Text = "RN TEAM"
 Titulo.TextColor3 = Color3.fromRGB(255, 255, 255)
 Titulo.Font = Enum.Font.SourceSansBold
 Titulo.TextSize = 16
@@ -67,7 +67,7 @@ TabContainer.BorderSizePixel = 0
 TabContainer.Parent = Frame
 Instance.new("UICorner", TabContainer).CornerRadius = UDim.new(0, 6)
 
--- Diseño horizontal para las pestañas
+-- Layout horizontal para las pestañas
 local TabLayout = Instance.new("UIListLayout")
 TabLayout.FillDirection = Enum.FillDirection.Horizontal
 TabLayout.Padding = UDim.new(0, 2)
@@ -103,7 +103,7 @@ BackgroundDrag.BorderSizePixel = 0
 BackgroundDrag.ZIndex = 0
 BackgroundDrag.Parent = Frame
 
--- Sistema de Pestañas
+-- Sistema de pestañas
 local tabs = {}
 local currentTab = nil
 
@@ -146,7 +146,7 @@ local function createTab(tabName)
             tabData.button.TextColor3 = Color3.fromRGB(200, 200, 200)
         end
         
-        -- Mostrar pestaña clickeada
+        -- Mostrar pestaña clicada
         tab.content.Visible = true
         tab.button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
         tab.button.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -167,12 +167,12 @@ local function ajustarAlturaJanela()
         local tabContent = tabs[currentTab].content
         local alturaConteudo = tabs[currentTab].layout.AbsoluteContentSize.Y + 100
         
-        local novaAltura = math.clamp(alturaConteudo, alturaMinima, alturaMaxima)
+        local nuevaAltura = math.clamp(alturaConteudo, alturaMinima, alturaMaxima)
         
         local tween = TweenService:Create(
             Frame,
             TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-            {Size = UDim2.new(0, 280, 0, novaAltura)}
+            {Size = UDim2.new(0, 280, 0, nuevaAltura)}
         )
         tween:Play()
         
@@ -357,7 +357,7 @@ local function setupMainTab()
         _G.autoMochila = isActive
         
         if isActive then
-            print("🟢 Auto Mochila ACTIVADO")
+            print("🟢 Auto Mochila ACTIVADA")
             task.spawn(function()
                 while _G.autoMochila do
                     pcall(function()
@@ -368,14 +368,14 @@ local function setupMainTab()
                 end
             end)
         else
-            print("🔴 Auto Mochila DESACTIVADO")
+            print("🔴 Auto Mochila DESACTIVADA")
         end
     end, tabs["Main"].content)
 end
 
 -- ===== PESTAÑA FARM =====
 local function setupFarmTab()
-    -- SISTEMA AUTO FARM (Agrupador de NPCs) CORREGIDO
+    -- SISTEMA AUTO FARM (NPC Recolector) CORREGIDO
     local autoFarmSystem = {
         active = false,
         connection = nil,
@@ -406,7 +406,7 @@ local function setupFarmTab()
                 return
             end
             
-            print("[BUFF] Aplicando buffs...")
+            print("[BUFF] Aplicando mejoras...")
             self.lastBuffTime = time()
             
             local character = LocalPlayer.Character
@@ -475,7 +475,7 @@ local function setupFarmTab()
             end
             
             if gathered > 0 then
-                print("[AGRUPADOR NPC] ¡" .. gathered .. " NPCs agrupados!")
+                print("[NPC RECOLECTADOS] " .. gathered .. " NPCs reunidos!")
             end
         end,
         
@@ -486,7 +486,7 @@ local function setupFarmTab()
             self.npcFolder = nil
             self.lastBuffTime = 0
             
-            print("🟢 Auto Farm ¡INICIADO!")
+            print("🟢 ¡Auto Farm INICIADO!")
             
             self.connection = RunService.Heartbeat:Connect(function()
                 if not self.active then return end
@@ -505,10 +505,11 @@ local function setupFarmTab()
                 self.connection = nil
             end
             
-            print("🔴 Auto Farm ¡DETENIDO!")
+            print("🔴 ¡Auto Farm DETENIDO!")
         end
     }
 
+    
     -- Toggle Auto Farm CORREGIDO
     local AutoFarmToggle, AutoFarmBox, setAutoFarmState = CriarToggle("Auto Farm NPC", function(isActive)
         if isActive then
@@ -534,7 +535,7 @@ local function setupFarmTab()
                         }
                         game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PlayerClickAttackSkill"):FireServer(unpack(args))
                     end)
-                    task.wait(-9999999)
+                    wait(-999999999999)
                 end
             end)
         else
@@ -542,7 +543,7 @@ local function setupFarmTab()
         end
     end, tabs["Farm"].content)
 
-    local potion1 = CriarBotao("Potion Luck V1", function()
+    local potion1 = CriarBotao("Poción Suerte V1", function()
         pcall(function()
             local args = {
                 {
@@ -555,7 +556,7 @@ local function setupFarmTab()
         end)
     end, tabs["Farm"].content)
 
-    local potion2 = CriarBotao("Potion Damage V1", function()
+    local potion2 = CriarBotao("Poción Daño V1", function()
         pcall(function()
             local args = {
                 {
@@ -568,7 +569,7 @@ local function setupFarmTab()
         end)
     end, tabs["Farm"].content)
 
-    local potion3 = CriarBotao("Potion Gold V1", function()
+    local potion3 = CriarBotao("Poción Oro V1", function()
         pcall(function()
             local args = {
                 {
@@ -581,7 +582,7 @@ local function setupFarmTab()
         end)
     end, tabs["Farm"].content)
 
-    local potion4 = CriarBotao("Potion Luck V2", function()
+    local potion4 = CriarBotao("Poción Suerte V2", function()
         pcall(function()
             local args = {
                 {
@@ -594,7 +595,7 @@ local function setupFarmTab()
         end)
     end, tabs["Farm"].content)
 
-    local potion5 = CriarBotao("Potion Damage V2", function()
+    local potion5 = CriarBotao("Poción Daño V2", function()
         pcall(function()
             local args = {
                 {
@@ -607,7 +608,7 @@ local function setupFarmTab()
         end)
     end, tabs["Farm"].content)
 
-    local potion6 = CriarBotao("Potion Gold V2", function()
+    local potion6 = CriarBotao("Poción Oro V2", function()
         pcall(function()
             local args = {
                 {
@@ -620,11 +621,65 @@ local function setupFarmTab()
         end)
     end, tabs["Farm"].content)
 end
+-- ===== PESTAÑA FARM AVANZADA =====
+local function setupFarmAvanzadaTab()
+    local autoFarmIman = {
+        activo = false,
+        conexion = nil,
+        npcFolder = nil,
+        maxDistance = 120, -- Solo NPCs cerca (ajusta el valor si quieres más o menos distancia)
+        pullDistance = 10, -- Los acerca más fuerte
+        loopDelay = 0.1,   -- Más rápido que el farm normal
+        start = function(self)
+            if self.activo then return end
+            self.activo = true
+            print("🟢 Farm Avanzada (Imán) ACTIVADO")
+            self.npcFolder = workspace:FindFirstChild("Enemys")
+            self.conexion = RunService.Heartbeat:Connect(function()
+                if not self.activo then return end
+                if not self.npcFolder then return end
+                local character = LocalPlayer.Character
+                local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
+                if not humanoidRootPart then return end
+                for _, npc in ipairs(self.npcFolder:GetChildren()) do
+                    if npc:IsA("Model") and npc:FindFirstChild("Humanoid") and npc.Humanoid.Health > 0 and npc:FindFirstChild("HumanoidRootPart") then
+                        local npcHRP = npc.HumanoidRootPart
+                        local distancia = (humanoidRootPart.Position - npcHRP.Position).Magnitude
+                        if distancia < self.maxDistance then
+                            local direccion = (humanoidRootPart.Position - npcHRP.Position).Unit
+                            npcHRP.CFrame = CFrame.new(
+                                humanoidRootPart.Position + direccion * 5,
+                                humanoidRootPart.Position
+                            )
+                        end
+                    end
+                end
+            end)
+        end,
+        stop = function(self)
+            if not self.activo then return end
+            self.activo = false
+            if self.conexion then
+                self.conexion:Disconnect()
+                self.conexion = nil
+            end
+            print("🔴 Farm Avanzada (Imán) DESACTIVADO")
+        end
+    }
+
+    local FarmAvanzadaToggle, FarmAvanzadaBox, setFarmAvanzadaState = CriarToggle("Farm Avanzada (Imán)", function(isActive)
+        if isActive then
+            autoFarmIman:start()
+        else
+            autoFarmIman:stop()
+        end
+    end, tabs["Farm Avanzada"].content)
+end
 
 -- ===== PESTAÑA AUTOMÁTICO =====
 local function setupAutoTab()
     -- Toggle Auto Raid Mundo 3 CORREGIDO
-    local AutoRaidW3Toggle, AutoRaidW3Box, setAutoRaidW3State = CriarToggle("Auto Raid World 3", function(isActive)
+    local AutoRaidW3Toggle, AutoRaidW3Box, setAutoRaidW3State = CriarToggle("Auto Raid Mundo 3", function(isActive)
         _G.autoRaidW3 = isActive
         
         if isActive then
@@ -644,7 +699,7 @@ local function setupAutoTab()
     end, tabs["Auto"].content)
 
     -- Toggle Auto Raid Mundo 7 CORREGIDO
-    local AutoRaidW7Toggle, AutoRaidW7Box, setAutoRaidW7State = CriarToggle("Auto Raid World 7", function(isActive)
+    local AutoRaidW7Toggle, AutoRaidW7Box, setAutoRaidW7State = CriarToggle("Auto Raid Mundo 7", function(isActive)
         _G.autoRaidW7 = isActive
         
         if isActive then
@@ -663,7 +718,7 @@ local function setupAutoTab()
         end
     end, tabs["Auto"].content)
     
-local collect1 = CriarBotao("auto collect", function()
+local collect1 = CriarBotao("auto recolectar", function()
     if autoCollectActive then
         -- Apagar
         autoCollectActive = false
@@ -699,6 +754,10 @@ local collect1 = CriarBotao("auto collect", function()
         print("🟢 ¡Auto Recolectar activado!")
     end
 end, tabs["Auto"].content)
+
+local autoraid0 = CriarBotao("auto raid beta", function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/RN-TEAM-2758/Auto-raid-teste/refs/heads/main/script.js"))()
+end, tabs["Auto"].content)
 end
 
 -- ===== PESTAÑA JUGADOR =====
@@ -713,7 +772,7 @@ local function setupPlayerTab()
     local WalkLabel = Instance.new("TextLabel")
     WalkLabel.Size = UDim2.new(0.6, 0, 1, 0)
     WalkLabel.BackgroundTransparency = 1
-    WalkLabel.Text = "Speed"
+    WalkLabel.Text = "Velocidad"
     WalkLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     WalkLabel.Font = Enum.Font.SourceSansBold
     WalkLabel.TextSize = 16
@@ -783,7 +842,7 @@ local function setupPlayerTab()
     local HitboxLabel = Instance.new("TextLabel")
     HitboxLabel.Size = UDim2.new(0.6, 0, 1, 0)
     HitboxLabel.BackgroundTransparency = 1
-    HitboxLabel.Text = "kill aura"
+    HitboxLabel.Text = "Kill Aura"
     HitboxLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     HitboxLabel.Font = Enum.Font.SourceSansBold
     HitboxLabel.TextSize = 16
@@ -826,7 +885,7 @@ local function setupPlayerTab()
         local val = tonumber(HitboxBox.Text)
         if val then
             if val == 0 then
-                print("🔴 Kill Aura DESACTIVADO")
+                print("🔴 Kill Aura DESACTIVADA")
                 _G.HitboxEnabled = false
             elseif val > 0 and val <= 2000 then
                 _G.HitboxSize = val
@@ -842,7 +901,7 @@ local function setupPlayerTab()
         end
     end)
 
-    -- Configuraciones del sistema de Hitbox
+    -- Configuración del sistema de Hitbox
     _G.HitboxSize = 60
     _G.HitboxEnabled = true
     _G.NPCFolder = workspace:FindFirstChild("Enemys") -- Carpeta donde están los NPCs
@@ -857,7 +916,7 @@ local function setupPlayerTab()
                             npc.HumanoidRootPart.Size = Vector3.new(_G.HitboxSize, _G.HitboxSize, _G.HitboxSize)
                             npc.HumanoidRootPart.CanCollide = false
                         else
-                            -- Restaura el tamaño original cuando se desactiva
+                            -- Restaura el tamaño original cuando está desactivado
                             npc.HumanoidRootPart.Size = Vector3.new(2, 2, 1)
                             npc.HumanoidRootPart.CanCollide = true
                         end
@@ -920,6 +979,7 @@ end
 -- Crear las pestañas
 tabs["Main"] = createTab("Main")
 tabs["Farm"] = createTab("Farm")
+tabs["Farm Avanzada"] = createTab("Farm Avanzada")
 tabs["Auto"] = createTab("Auto")
 tabs["Player"] = createTab("Player")
 
@@ -928,17 +988,19 @@ setupMainTab()
 setupFarmTab()
 setupAutoTab()
 setupPlayerTab()
+setupFarmAvanzadaTab()
 
--- Conectar eventos de diseño para ajustar altura
+
+-- Conectar eventos de layout para ajustar altura
 for _, tab in pairs(tabs) do
     tab.layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
         if currentTab then
-           ajustarAlturaJanela()
+            ajustarAlturaJanela()
         end
     end)
 end
 
--- Sistema de desplazamiento suave con el mouse
+-- Sistema de desplazamiento suave con el ratón
 local function setupSmoothScrolling()
     UserInputService.InputChanged:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseWheel then
@@ -976,8 +1038,6 @@ _G.autoClick = false
 _G.HitboxSize = 60
 _G.HitboxEnabled = true
 
-print("🚀 ¡INTERFAZ CARGADA!")
+print("🚀 ¡INTERFAZ RN TEAM CARGADA!")
 print("✅ ¡Sistema de Hitbox/Kill Aura funcionando perfectamente!")
-
-
 
