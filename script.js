@@ -6,6 +6,8 @@ local TweenService = game:GetService("TweenService")
 local CoreGui = game:GetService("CoreGui")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local VirtualUser = game:GetService("VirtualUser")
 
 -- Crear ScreenGui
 local ScreenGui = Instance.new("ScreenGui")
@@ -20,7 +22,7 @@ local startPos
 
 -- Ventana principal
 local Frame = Instance.new("Frame")
-Frame.Size = UDim2.new(0, 280, 0, 350)
+Frame.Size = UDim2.new(0, 340, 0, 350)
 Frame.Position = UDim2.new(0.35, 0, 0.3, 0)
 Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 Frame.BorderSizePixel = 0
@@ -40,7 +42,7 @@ local Titulo = Instance.new("TextLabel")
 Titulo.Size = UDim2.new(0.8, 0, 1, 0)
 Titulo.Position = UDim2.new(0.1, 0, 0, 0)
 Titulo.BackgroundTransparency = 1
-Titulo.Text = "RN TEAM"
+Titulo.Text = "ENKY"
 Titulo.TextColor3 = Color3.fromRGB(255, 255, 255)
 Titulo.Font = Enum.Font.SourceSansBold
 Titulo.TextSize = 16
@@ -89,7 +91,7 @@ local Creditos = Instance.new("TextLabel")
 Creditos.Size = UDim2.new(1, 0, 0, 25)
 Creditos.Position = UDim2.new(0, 0, 1, -25)
 Creditos.BackgroundTransparency = 1
-Creditos.Text = "YouTube: RN_TEAM"
+Creditos.Text = "YouTube: ENKY"
 Creditos.TextColor3 = Color3.fromRGB(200, 200, 200)
 Creditos.Font = Enum.Font.SourceSansBold
 Creditos.TextSize = 14
@@ -152,27 +154,27 @@ local function createTab(tabName)
         tab.button.TextColor3 = Color3.fromRGB(255, 255, 255)
         
         currentTab = tabName
-        ajustarAlturaJanela()
+        ajustarAlturaVentana()
     end)
     
     return tab
 end
 
 -- Función para ajustar automáticamente la altura de la ventana
-local function ajustarAlturaJanela()
+local function ajustarAlturaVentana()
     local alturaMinima = 350
     local alturaMaxima = 450
     
     if currentTab and tabs[currentTab] then
         local tabContent = tabs[currentTab].content
-        local alturaConteudo = tabs[currentTab].layout.AbsoluteContentSize.Y + 100
+        local alturaContenido = tabs[currentTab].layout.AbsoluteContentSize.Y + 100
         
-        local nuevaAltura = math.clamp(alturaConteudo, alturaMinima, alturaMaxima)
+        local nuevaAltura = math.clamp(alturaContenido, alturaMinima, alturaMaxima)
         
         local tween = TweenService:Create(
             Frame,
             TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-            {Size = UDim2.new(0, 280, 0, nuevaAltura)}
+            {Size = UDim2.new(0, 340, 0, nuevaAltura)}
         )
         tween:Play()
         
@@ -221,7 +223,7 @@ end)
 -- Función para minimizar/maximizar
 local isMinimized = false
 local originalSize = Frame.Size
-local minimizedSize = UDim2.new(0, 280, 0, 30)
+local minimizedSize = UDim2.new(0, 340, 0, 30)
 
 MinimizeButton.MouseButton1Click:Connect(function()
     isMinimized = not isMinimized
@@ -254,31 +256,31 @@ MinimizeButton.MouseButton1Click:Connect(function()
 end)
 
 -- Botón estilo barra
-local function CriarBotao(texto, callback, parent)
-    local Botao = Instance.new("TextButton")
-    Botao.Size = UDim2.new(1, 0, 0, 35)
-    Botao.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    Botao.Text = texto
-    Botao.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Botao.Font = Enum.Font.SourceSansBold
-    Botao.TextSize = 16
-    Botao.ZIndex = 1
-    Botao.Parent = parent or MainContentContainer
-    Instance.new("UICorner", Botao).CornerRadius = UDim.new(0, 6)
+local function CrearBoton(texto, callback, parent)
+    local Boton = Instance.new("TextButton")
+    Boton.Size = UDim2.new(1, 0, 0, 35)
+    Boton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    Boton.Text = texto
+    Boton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Boton.Font = Enum.Font.SourceSansBold
+    Boton.TextSize = 16
+    Boton.ZIndex = 1
+    Boton.Parent = parent or MainContentContainer
+    Instance.new("UICorner", Boton).CornerRadius = UDim.new(0, 6)
 
-    Botao.MouseEnter:Connect(function()
-        Botao.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    Boton.MouseEnter:Connect(function()
+        Boton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     end)
-    Botao.MouseLeave:Connect(function()
-        Botao.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    Boton.MouseLeave:Connect(function()
+        Boton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     end)
 
-    Botao.MouseButton1Click:Connect(callback)
-    return Botao
+    Boton.MouseButton1Click:Connect(callback)
+    return Boton
 end
 
 -- Toggle (checkbox) CORREGIDO
-local function CriarToggle(texto, callback, parent)
+local function CrearToggle(texto, callback, parent)
     local ToggleContainer = Instance.new("Frame")
     ToggleContainer.Size = UDim2.new(1, 0, 0, 30)
     ToggleContainer.BackgroundTransparency = 1
@@ -333,13 +335,13 @@ end
 -- ===== PESTAÑA PRINCIPAL =====
 local function setupMainTab()
     -- Toggle Auto Sombrero CORREGIDO
-    local AutoChapeuToggle, AutoChapeuBox, setAutoChapeuState = CriarToggle("Auto Sombrero", function(isActive)
-        _G.autoChapeu = isActive
+    local AutoSombreroToggle, AutoSombreroBox, setAutoSombreroState = CrearToggle("Auto Sombrero", function(isActive)
+        _G.autoSombrero = isActive
         
         if isActive then
             print("🟢 Auto Sombrero ACTIVADO")
             task.spawn(function()
-                while _G.autoChapeu do
+                while _G.autoSombrero do
                     pcall(function()
                         local args = {400001}
                         game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("RerollOrnament"):InvokeServer(unpack(args))
@@ -353,7 +355,7 @@ local function setupMainTab()
     end, tabs["Main"].content)
 
     -- Toggle Auto Mochila CORREGIDO
-    local AutoMochilaToggle, AutoMochilaBox, setAutoMochilaState = CriarToggle("Auto Mochila", function(isActive)
+    local AutoMochilaToggle, AutoMochilaBox, setAutoMochilaState = CrearToggle("Auto Mochila", function(isActive)
         _G.autoMochila = isActive
         
         if isActive then
@@ -414,11 +416,6 @@ local function setupFarmTab()
                 local humanoid = character:FindFirstChild("Humanoid")
                 if humanoid then
                     humanoid.WalkSpeed = 90
-                    delay(10, function()
-                        if humanoid then
-                            humanoid.WalkSpeed = 90
-                        end
-                    end)
                 end
             end
         end,
@@ -511,7 +508,7 @@ local function setupFarmTab()
 
     
     -- Toggle Auto Farm CORREGIDO
-    local AutoFarmToggle, AutoFarmBox, setAutoFarmState = CriarToggle("Auto Farm NPC", function(isActive)
+    local AutoFarmToggle, AutoFarmBox, setAutoFarmState = CrearToggle("Auto Farm NPC", function(isActive)
         if isActive then
             autoFarmSystem:start()
         else
@@ -520,7 +517,7 @@ local function setupFarmTab()
     end, tabs["Farm"].content)
 
     -- Botón Auto Click CORREGIDO
-    local AutoClickToggle, AutoClickBox, setAutoClickState = CriarToggle("Auto Click", function(isActive)
+    local AutoClickToggle, AutoClickBox, setAutoClickState = CrearToggle("Auto Click", function(isActive)
         _G.autoClick = isActive
         
         if isActive then
@@ -528,14 +525,11 @@ local function setupFarmTab()
             task.spawn(function()
                 while _G.autoClick do
                     pcall(function()
-                        local args = {
-                            {
-                                attackEnemyGUID = "3b887f80-7ae5-42ad-8915-73f94f2c87e1"
-                            }
-                        }
-                        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PlayerClickAttackSkill"):FireServer(unpack(args))
+                        VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 0)
+                        task.wait(0.05)
+                        VirtualInputManager:SendMouseButtonEvent(0, 0, 0, false, game, 0)
                     end)
-                    wait(-999999999999)
+                    task.wait(0.1)
                 end
             end)
         else
@@ -543,7 +537,31 @@ local function setupFarmTab()
         end
     end, tabs["Farm"].content)
 
-    local potion1 = CriarBotao("Poción Suerte V1", function()
+    -- Auto Habilidades (presiona Z, X, C)
+    local AutoHabilidadesToggle, AutoHabilidadesBox, setAutoHabilidadesState = CrearToggle("Auto Habilidades", function(isActive)
+        _G.autoHabilidades = isActive
+        
+        if isActive then
+            print("🟢 Auto Habilidades ACTIVADO (Z, X, C)")
+            task.spawn(function()
+                while _G.autoHabilidades do
+                    pcall(function()
+                        for _, key in ipairs({Enum.KeyCode.Z, Enum.KeyCode.X, Enum.KeyCode.C}) do
+                            VirtualInputManager:SendKeyEvent(true, key, false, game)
+                            task.wait(0.02)
+                            VirtualInputManager:SendKeyEvent(false, key, false, game)
+                            task.wait(0.05)
+                        end
+                    end)
+                    task.wait(0.3)
+                end
+            end)
+        else
+            print("🔴 Auto Habilidades DESACTIVADO")
+        end
+    end, tabs["Farm"].content)
+
+    local potion1 = CrearBoton("Poción Suerte V1", function()
         pcall(function()
             local args = {
                 {
@@ -556,7 +574,7 @@ local function setupFarmTab()
         end)
     end, tabs["Farm"].content)
 
-    local potion2 = CriarBotao("Poción Daño V1", function()
+    local potion2 = CrearBoton("Poción Daño V1", function()
         pcall(function()
             local args = {
                 {
@@ -569,7 +587,7 @@ local function setupFarmTab()
         end)
     end, tabs["Farm"].content)
 
-    local potion3 = CriarBotao("Poción Oro V1", function()
+    local potion3 = CrearBoton("Poción Oro V1", function()
         pcall(function()
             local args = {
                 {
@@ -582,7 +600,7 @@ local function setupFarmTab()
         end)
     end, tabs["Farm"].content)
 
-    local potion4 = CriarBotao("Poción Suerte V2", function()
+    local potion4 = CrearBoton("Poción Suerte V2", function()
         pcall(function()
             local args = {
                 {
@@ -595,7 +613,7 @@ local function setupFarmTab()
         end)
     end, tabs["Farm"].content)
 
-    local potion5 = CriarBotao("Poción Daño V2", function()
+    local potion5 = CrearBoton("Poción Daño V2", function()
         pcall(function()
             local args = {
                 {
@@ -608,7 +626,7 @@ local function setupFarmTab()
         end)
     end, tabs["Farm"].content)
 
-    local potion6 = CriarBotao("Poción Oro V2", function()
+    local potion6 = CrearBoton("Poción Oro V2", function()
         pcall(function()
             local args = {
                 {
@@ -624,7 +642,7 @@ end
 -- ===== PESTAÑA FARM AVANZADA =====
 local function setupFarmAvanzadaTab()
     -- Imán con rango reducido
-    local autoFarmIman = {
+    local autoIman = {
         activo = false,
         conexion = nil,
         npcFolder = nil,
@@ -670,18 +688,18 @@ local function setupFarmAvanzadaTab()
     }
 
     -- Toggle para activar/desactivar el imán
-    local FarmAvanzadaToggle, FarmAvanzadaBox, setFarmAvanzadaState = CriarToggle("Farm Avanzada (Imán)", function(isActive)
+    local FarmAvanzadaToggle, FarmAvanzadaBox, setFarmAvanzadaState = CrearToggle("Farm Avanzada (Imán)", function(isActive)
         if isActive then
-            autoFarmIman:start()
+            autoIman:start()
         else
-            autoFarmIman:stop()
+            autoIman:stop()
         end
     end, tabs["Farm Avanzada"].content)
 
     -- Toggle para TP auto al NPC más cercano (sin auto click)
     local tpAutoActivo = false
     local tpAutoConexion = nil
-    local TpAutoToggle, TpAutoBox, setTpAutoState = CriarToggle("TP auto al NPC más cercano", function(isActive)
+    local TpAutoToggle, TpAutoBox, setTpAutoState = CrearToggle("TP auto al NPC más cercano", function(isActive)
         tpAutoActivo = isActive
         if tpAutoActivo then
             print("🟢 TP auto ACTIVADO")
@@ -721,8 +739,11 @@ end
 
 -- ===== PESTAÑA AUTOMÁTICO =====
 local function setupAutoTab()
+    local autoCollectActive = false
+    local autoCollectConnection = nil
+
     -- Toggle Auto Raid Mundo 3 CORREGIDO
-    local AutoRaidW3Toggle, AutoRaidW3Box, setAutoRaidW3State = CriarToggle("Auto Raid Mundo 3", function(isActive)
+    local AutoRaidW3Toggle, AutoRaidW3Box, setAutoRaidW3State = CrearToggle("Auto Raid Mundo 3", function(isActive)
         _G.autoRaidW3 = isActive
         
         if isActive then
@@ -742,7 +763,7 @@ local function setupAutoTab()
     end, tabs["Auto"].content)
 
     -- Toggle Auto Raid Mundo 7 CORREGIDO
-    local AutoRaidW7Toggle, AutoRaidW7Box, setAutoRaidW7State = CriarToggle("Auto Raid Mundo 7", function(isActive)
+    local AutoRaidW7Toggle, AutoRaidW7Box, setAutoRaidW7State = CrearToggle("Auto Raid Mundo 7", function(isActive)
         _G.autoRaidW7 = isActive
         
         if isActive then
@@ -761,7 +782,7 @@ local function setupAutoTab()
         end
     end, tabs["Auto"].content)
     
-local collect1 = CriarBotao("auto recolectar", function()
+local collect1 = CrearBoton("auto recolectar", function()
     if autoCollectActive then
         -- Apagar
         autoCollectActive = false
@@ -798,7 +819,7 @@ local collect1 = CriarBotao("auto recolectar", function()
     end
 end, tabs["Auto"].content)
 
-local autoraid0 = CriarBotao("auto raid beta", function()
+local autoraid0 = CrearBoton("auto raid beta", function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/RN-TEAM-2758/Auto-raid-teste/refs/heads/main/script.js"))()
 end, tabs["Auto"].content)
 end
@@ -976,7 +997,26 @@ local function setupPlayerTab()
         end)
     end)
 
-local noclipBtn = CriarBotao("noclip", function()
+local antiAfkConexion = nil
+    local AntiAfkToggle, AntiAfkBox, setAntiAfkState = CrearToggle("Anti-AFK", function(isActive)
+        if isActive then
+            if not antiAfkConexion then
+                antiAfkConexion = LocalPlayer.Idled:Connect(function()
+                    VirtualUser:CaptureController()
+                    VirtualUser:ClickButton2(Vector2.new())
+                end)
+            end
+            print("🟢 Anti-AFK ACTIVADO")
+        else
+            if antiAfkConexion then
+                antiAfkConexion:Disconnect()
+                antiAfkConexion = nil
+            end
+            print("🔴 Anti-AFK DESACTIVADO")
+        end
+    end, tabs["Player"].content)
+
+local noclipBtn = CrearBoton("noclip", function()
     pcall(function()
         -- Script de Noclip Automático
         local Player = game.Players.LocalPlayer
@@ -1019,12 +1059,141 @@ local noclipBtn = CriarBotao("noclip", function()
 end, tabs["Player"].content)
 end
 
+-- ===== PESTAÑA TELEPORT =====
+local function setupTeleportTab()
+    local function teleportar(cframe, nombre)
+        local character = LocalPlayer.Character
+        local hrp = character and character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            hrp.CFrame = cframe
+            print("🟢 Teletransportado a: " .. nombre)
+        else
+            warn("No hay personaje para teletransportar")
+        end
+    end
+
+    local Teleports = {
+        ["Pet Level UP"] = CFrame.new(153.25486755371094, 0.771240234375, 5751.2392578125),
+        ["Pet Fusion"] = CFrame.new(43.266326904296875, 0.7713623046875, 6121.9658203125),
+        ["Grade"] = CFrame.new(149.6376190185547, 38.1885986328125, 6297.5322265625)
+    }
+
+    for nombre, cframe in pairs(Teleports) do
+        CrearBoton("TP " .. nombre, function()
+            teleportar(cframe, nombre)
+        end, tabs["Teleport"].content)
+    end
+end
+
+-- ===== PESTAÑA DEBUG (descubrir funciones del juego) =====
+local function setupDebugTab()
+    local function formatArgs(...)
+        local parts = {}
+        local n = select("#", ...)
+        for i = 1, n do
+            local v = select(i, ...)
+            if typeof(v) == "Instance" then
+                table.insert(parts, string.format("Instance[%s]", v.ClassName))
+            elseif type(v) == "table" then
+                table.insert(parts, "table{...}")
+            elseif typeof(v) == "CFrame" then
+                table.insert(parts, "CFrame{}")
+            else
+                table.insert(parts, tostring(v))
+            end
+        end
+        return table.concat(parts, ", ")
+    end
+
+    -- Listar todos los remotes del juego
+    local ListarBoton = CrearBoton("Listar Remotes", function()
+        print("======== LISTA DE REMOTES (escribe en F9) ========")
+        local total = 0
+        local function scan(folder)
+            if ReplicatedStorage:FindFirstChild("Remotes") then
+                local remotesFolder = ReplicatedStorage.Remotes
+                for _, remote in ipairs(remotesFolder:GetDescendants()) do
+                    if remote:IsA("RemoteEvent") or remote:IsA("RemoteFunction") or remote:IsA("UnreliableRemoteEvent") then
+                        total += 1
+                        print("[" .. total .. "] " .. remote.ClassName .. " :: " .. remote.Name)
+                    end
+                end
+            else
+                for _, instance in ipairs(ReplicatedStorage:GetChildren()) do
+                    if instance:IsA("RemoteEvent") or instance:IsA("RemoteFunction") or instance:IsA("UnreliableRemoteEvent") then
+                        total += 1
+                        print("[" .. total .. "] " .. instance.ClassName .. " :: " .. instance.Name)
+                    end
+                end
+            end
+        end
+        scan(ReplicatedStorage)
+        print("====================================")
+        print("Total: " .. total .. " remotes encontrados. Pásame el print y agrego botones.")
+    end, tabs["Debug"].content)
+
+    -- Remote Spy: captura lo que envías al servidor
+    local spyHooked = false
+    local OldNamecall
+    local RemoteSpyToggle, RemoteSpyBox = CrearToggle("Remote Spy", function(isActive)
+        if isActive then
+            pcall(function()
+                if not getnamecallmethod or not hookfunction or not newcclosure then
+                    error("Executor sin soporte de hooking")
+                end
+                if not spyHooked then
+                    OldNamecall = hookfunction(getnamecallmethod, newcclosure(function(...)
+                        local self = ...
+                        local method = getnamecallmethod()
+                        if method == "InvokeServer" or method == "FireServer" then
+                            local nombre
+                            if type(self) == "table" and self.Name then
+                                nombre = self.Name
+                            else
+                                nombre = tostring(self)
+                            end
+                            task.spawn(function()
+                                print("[SPY ➜ SERVIDOR] " .. method .. " :: " .. nombre .. " (" .. formatArgs(select(2, ...)) .. ")")
+                            end)
+                        end
+                        return OldNamecall(...)
+                    end))
+                    spyHooked = true
+                end
+                print("🟢 Remote Spy ACTIVADO — abre la consola (F9), interactúa con el juego y copia los prints")
+            end)
+        else
+            pcall(function()
+                if spyHooked and OldNamecall then
+                    hookfunction(getnamecallmethod, OldNamecall)
+                    spyHooked = false
+                    OldNamecall = nil
+                end
+            end)
+            print("🔴 Remote Spy DESACTIVADO")
+        end
+    end, tabs["Debug"].content)
+end
+
 -- Crear las pestañas
 tabs["Main"] = createTab("Main")
 tabs["Farm"] = createTab("Farm")
 tabs["Farm Avanzada"] = createTab("Farm Avanzada")
 tabs["Auto"] = createTab("Auto")
 tabs["Player"] = createTab("Player")
+tabs["Teleport"] = createTab("Teleport")
+tabs["Debug"] = createTab("Debug")
+
+-- Ajustar tamaño de las pestañas para que quepan todas en una fila
+local cantidadPestanas = 0
+for _ in pairs(tabs) do
+    cantidadPestanas += 1
+end
+local anchoPestana = 1 / cantidadPestanas
+for _, tab in pairs(tabs) do
+    tab.button.Size = UDim2.new(anchoPestana - 0.01, 0, 0.8, 0)
+    tab.button.TextSize = 10
+end
 
 -- Configurar todas las pestañas
 setupMainTab()
@@ -1032,13 +1201,15 @@ setupFarmTab()
 setupAutoTab()
 setupPlayerTab()
 setupFarmAvanzadaTab()
+setupTeleportTab()
+setupDebugTab()
 
 
 -- Conectar eventos de layout para ajustar altura
 for _, tab in pairs(tabs) do
     tab.layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
         if currentTab then
-            ajustarAlturaJanela()
+            ajustarAlturaVentana()
         end
     end)
 end
@@ -1073,14 +1244,15 @@ if tabs["Main"] then
 end
 
 -- Inicializar variables globales
-_G.autoChapeu = false
+_G.autoSombrero = false
 _G.autoMochila = false
 _G.autoRaidW3 = false
 _G.autoRaidW7 = false
 _G.autoClick = false
+_G.autoHabilidades = false
 _G.HitboxSize = 60
 _G.HitboxEnabled = true
 
-print("🚀 ¡INTERFAZ RN TEAM CARGADA!")
+print("🚀 ¡INTERFAZ ENKY CARGADA!")
 print("✅ ¡Sistema de Hitbox/Kill Aura funcionando perfectamente!")
 
